@@ -11,4 +11,9 @@ class Board extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function colunas()
+    {
+        return $this->hasMany(Coluna::class);
+    }
 }
