@@ -11,4 +11,7 @@ class Coluna extends Model
     {
         return $this->belongsTo(Coluna::class);
     }
+    public function tasks(){
+        return $this->hasMany(Task::class);
+    }
 }
