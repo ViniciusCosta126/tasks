@@ -14,10 +14,10 @@ Este projeto segue boas práticas para uma API RESTful utilizando Laravel.
 
 ## 🚨 Tratamento de Exceções
 
--   [ ] Exceptions customizadas criadas (ex: `BoardNotFoundException`)
--   [ ] Registro de exceptions no `app/Exceptions/Handler.php`
--   [ ] Evitar uso desnecessário de try/catch nos controllers
--   [ ] Exceções retornam respostas JSON amigáveis
+-   [x] Exceptions customizadas criadas (ex: `BoardNotFoundException`)
+-   [x] Registro de exceptions no `app/Exceptions/Handler.php`
+-   [x] Evitar uso desnecessário de try/catch nos controllers
+-   [x] Exceções retornam respostas JSON amigáveis
 
 ---
 
