@@ -29,4 +29,9 @@ class Task extends Model
     {
         return $this->belongsTo(Coluna::class);
     }
+
+    public function comentarios()
+    {
+        return $this->hasMany(Comentario::class);
+    }
 }

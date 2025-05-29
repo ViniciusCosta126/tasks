@@ -46,15 +46,23 @@ class User extends Authenticatable
         ];
     }
 
-    public function boards(){
+    public function boards()
+    {
         return $this->hasMany(Board::class);
     }
 
-    public function tarefasAtribuidas(){
-        return $this->hasMany(Task::class,'responsavel_id');
+    public function tarefasAtribuidas()
+    {
+        return $this->hasMany(Task::class, 'responsavel_id');
     }
 
-    public function tarefasCriadas(){
-        return $this->hasMany(Task::class,'criador_id');
+    public function tarefasCriadas()
+    {
+        return $this->hasMany(Task::class, 'criador_id');
+    }
+
+    public function comentariosCriados()
+    {
+        return $this->hasMany(Comentario::class, 'user_id');
     }
 }
