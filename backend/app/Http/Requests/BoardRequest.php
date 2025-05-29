@@ -27,4 +27,17 @@ class BoardRequest extends FormRequest
             'ativo' => 'required|boolean',
         ];
     }
+    public function messages(): array
+    {
+        return [
+            'titulo.required' => 'O campo título é obrigatório.',
+            'titulo.unique' => 'Já existe uma board com este título.',
+            'titulo.max' => 'O título não pode ter mais que 255 caracteres.',
+
+            'user_id.required' => 'O campo usuário é obrigatório.',
+
+            'ativo.required' => 'O campo ativo é obrigatório.',
+            'ativo.boolean' => 'O campo ativo deve ser verdadeiro ou falso.',
+        ];
+    }
 }

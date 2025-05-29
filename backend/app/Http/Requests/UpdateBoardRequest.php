@@ -32,4 +32,15 @@ class UpdateBoardRequest extends FormRequest
             'ativo' => 'sometimes|boolean',
         ];
     }
+    public function messages(): array
+    {
+        return [
+            'titulo.max' => 'O título não pode ter mais que 255 caracteres.',
+            'titulo.unique' => 'Já existe uma board com este título.',
+
+            'user_id.exists' => 'O usuário informado não existe.',
+
+            'ativo.boolean' => 'O campo ativo deve ser verdadeiro ou falso.',
+        ];
+    }
 }

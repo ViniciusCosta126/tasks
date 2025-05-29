@@ -26,4 +26,12 @@ class UpdateColunaRequest extends FormRequest
             'titulo' => ["required", "max:255", Rule::unique('colunas', 'titulo')->ignore($this->board)],
         ];
     }
+    public function messages(): array
+    {
+        return [
+            'titulo.required' => 'O campo título é obrigatório.',
+            'titulo.max' => 'O título não pode ter mais que 255 caracteres.',
+            'titulo.unique' => 'Já existe uma coluna com este título.',
+        ];
+    }
 }

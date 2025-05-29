@@ -26,4 +26,14 @@ class StoreColunaRequest extends FormRequest
             'board_id' => 'required',
         ];
     }
+    public function messages(): array
+    {
+        return [
+            'titulo.required' => 'O campo título é obrigatório.',
+            'titulo.unique' => 'Já existe uma coluna com este título.',
+            'titulo.max' => 'O título não pode ter mais que 255 caracteres.',
+
+            'board_id.required' => 'O campo board é obrigatório.',
+        ];
+    }
 }
