@@ -3,35 +3,37 @@
 namespace App\Http\Services;
 
 use App\Exceptions\NotFoundException;
+use App\Http\Resources\BoardResource;
 use App\Models\Board;
 
 class BoardService
 {
     public function getAllBoardsActive()
     {
-        return Board::where('ativo', 1)->get();
+        $boards = Board::with(['colunas'])->where('ativo', 1)->get();
+        return BoardResource::collection($boards);
     }
 
-    public function createBoard($data): Board
+    public function createBoard($data): BoardResource
     {
         $board = Board::create($data);
-        return $board;
+        return new BoardResource($board);
     }
 
-    public function getBoardById($id): ?Board
+    public function getBoardById($id): ?BoardResource
     {
-        $board = Board::where('id', $id)->first();
+        $board = Board::with(['colunas'])->where('id', $id)->first();
         if (!$board) {
             throw new NotFoundException("Board com id:$id não encontrado.");
         }
 
-        return $board;
+        return new BoardResource($board);
     }
 
-    public function updateBoard(Board $board, $data): Board
+    public function updateBoard(Board $board, $data): BoardResource
     {
         $board->update($data);
-        return $board;
+        return new BoardResource($board);
     }
 
     public function deleteBoard(Board $board)

@@ -3,34 +3,36 @@
 namespace App\Http\Services;
 
 use App\Exceptions\NotFoundException;
+use App\Http\Resources\ColunaResource;
 use App\Models\Coluna;
 class ColunaService
 {
     public function getAllColumns()
     {
-        return Coluna::all();
+        $colunas = Coluna::with(['board', 'tasks'])->get();
+        return ColunaResource::collection($colunas);
     }
 
-    public function createColumn($data): Coluna
+    public function createColumn($data): ColunaResource
     {
         $coluna = Coluna::create($data);
-        return $coluna;
+        return new ColunaResource($coluna);
     }
 
-    public function getColumnById($id): Coluna|null
+    public function getColumnById($id): ColunaResource|null
     {
-        $column = Coluna::where('id', $id)->first();
+        $column = Coluna::with(['board', 'tasks'])->where('id', $id)->first();
 
         if (!$column) {
             throw new NotFoundException("Coluna não encontrada!");
         }
-        return $column;
+        return new ColunaResource($column);
     }
 
-    public function columnUpdate(Coluna $column, $data): Coluna
+    public function columnUpdate(Coluna $column, $data): ColunaResource
     {
         $column->update($data);
-        return $column;
+        return new ColunaResource($column);
     }
 
     public function columnDelete(Coluna $column)
