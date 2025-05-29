@@ -4,19 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreComentarioRequest;
 use App\Http\Requests\UpdateComentarioRequest;
-use App\Models\Comentario;
+use App\Http\Services\ComentariosService;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class ComentarioController extends Controller
 {
+
+    public ComentariosService $comentariosService;
+
+    public function __construct(ComentariosService $comentariosService)
+    {
+        $this->comentariosService = $comentariosService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index(): JsonResponse
     {
-        $comentarios = Comentario::all();
+        $comentarios = $this->comentariosService->getAllComment();
         return response()->json(['comentarios' => $comentarios], 200);
     }
 
@@ -27,7 +33,7 @@ class ComentarioController extends Controller
     {
         try {
             $validated = $request->validated();
-            $comentario = Comentario::create($validated);
+            $comentario = $this->comentariosService->createComment($validated);
             return response()->json(["message" => "comentario criado com sucesso", "comentario" => $comentario], 201);
         } catch (Exception $e) {
             return response()->json(["message" => "Erro ao criar comentario.", "error" => $e->getMessage()], 500);
@@ -40,7 +46,7 @@ class ComentarioController extends Controller
     public function show($id): JsonResponse
     {
         try {
-            $comentario = Comentario::where('id', $id)->first();
+            $comentario = $this->comentariosService->getCommentById($id);
 
             if (empty($comentario)) {
                 return response()->json(['message' => "Comentario não econtrado"], 404);
@@ -58,15 +64,14 @@ class ComentarioController extends Controller
     public function update(UpdateComentarioRequest $request, $id)
     {
         try {
-            $comentario = Comentario::where('id', $id)->first();
+            $comentario = $this->comentariosService->getCommentById($id);
 
             if (empty($comentario)) {
                 return response()->json(['message' => "Comentario não econtrado"], 404);
             }
 
             $validated = $request->validated();
-
-            $comentario->update($validated);
+            $comentario = $this->comentariosService->updateComment($comentario, $validated);
             return response()->json(["message" => "Comentario atualizado com sucesso!", "comentario" => $comentario], 200);
         } catch (Exception $e) {
             return response()->json(["message" => "Erro ao editar comentario"], 500);
@@ -79,12 +84,12 @@ class ComentarioController extends Controller
     public function destroy($id): JsonResponse
     {
         try {
-            $comentario = Comentario::where('id', $id)->first();
+            $comentario = $this->comentariosService->getCommentById($id);
 
             if (empty($comentario)) {
                 return response()->json(["message" => "Erro ao encontrar comentario"], 404);
             }
-
+            $this->comentariosService->deleteComment($comentario);
             return response()->json([], 204);
         } catch (Exception $e) {
             return response()->json(['message' => "Erro ao apagar comentario"], 500);

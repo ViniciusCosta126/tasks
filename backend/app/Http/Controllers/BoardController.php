@@ -4,18 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BoardRequest;
 use App\Http\Requests\UpdateBoardRequest;
-use App\Models\Board;
+use App\Http\Services\BoardService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class BoardController extends Controller
 {
+    public BoardService $boardService;
+
+    public function __construct(BoardService $boardService)
+    {
+        $this->boardService = $boardService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index(): JsonResponse
     {
-        $boards = Board::where('ativo', 1)->get();
+        $boards = $this->boardService->getAllBoardsActive();
         return response()->json(["boards" => $boards], 200);
     }
 
@@ -26,7 +31,7 @@ class BoardController extends Controller
     {
         $validated = $request->validated();
         if ($validated) {
-            $board = Board::create($validated);
+            $board = $this->boardService->createBoard($validated);
             return response()->json(['message' => "Board criada com sucesso!", "board" => $board], 201);
         }
         return response()->json(["message" => "Erro ao criar board, valide os campos"], 400);
@@ -37,7 +42,7 @@ class BoardController extends Controller
      */
     public function show($id)
     {
-        $board = Board::where('id', $id)->first();
+        $board = $this->boardService->getBoardById($id);
 
         if (empty($board)) {
             return response()->json(["message" => "Board não encontrada!"], 404);
@@ -51,13 +56,14 @@ class BoardController extends Controller
      */
     public function update(UpdateBoardRequest $request, $id)
     {
-        $board = Board::where('id', $id)->first();
+        $board = $this->boardService->getBoardById($id);
+
         if (empty($board)) {
             return response()->json(["message" => "Board não encontrada"], 404);
         }
 
         $validated = $request->validated();
-        $board->update($validated);
+        $board = $this->boardService->updateBoard($board, $validated);
 
         return response()->json(["message" => "Board atualizada com sucesso!", "board" => $board], 200);
     }
@@ -67,12 +73,12 @@ class BoardController extends Controller
      */
     public function destroy($id)
     {
-        $board = Board::where('id', $id)->first();
+        $board = $this->boardService->getBoardById($id);
         if (empty($board)) {
             return response()->json(["message" => "Board não encontrada"], 404);
         }
 
-        $board->delete();
+        $this->boardService->deleteBoard($board);
         return response()->json(["message" => "Board excluida com sucesso!"], 204);
     }
 }
