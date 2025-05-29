@@ -3,22 +3,23 @@
 namespace App\Http\Services;
 
 use App\Exceptions\NotFoundException;
+use App\Http\Resources\ComentarioResource;
 use App\Models\Comentario;
 
 class ComentariosService
 {
     public function getAllComment()
     {
-        return Comentario::all();
+        return ComentarioResource::collection(Comentario::all());
     }
 
-    public function createComment($data): Comentario
+    public function createComment($data): ComentarioResource
     {
         $comment = Comentario::create($data);
-        return $comment;
+        return new ComentarioResource($comment);
     }
 
-    public function getCommentById($id): Comentario|null
+    public function getCommentById($id): ComentarioResource|null
     {
         $comment = Comentario::where('id', $id)->first();
 
@@ -26,13 +27,13 @@ class ComentariosService
             throw new NotFoundException("Comentario com id:$id não encontrado.");
         }
 
-        return $comment;
+        return new ComentarioResource($comment);
     }
 
-    public function updateComment(Comentario $comment, $data): Comentario
+    public function updateComment(Comentario $comment, $data): ComentarioResource
     {
         $comment->update($data);
-        return $comment;
+        return new ComentarioResource($comment);
     }
 
     public function deleteComment(Comentario $comment)
