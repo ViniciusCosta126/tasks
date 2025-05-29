@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Exceptions\NotFoundException;
 use App\Models\Task;
 
 
@@ -22,7 +23,12 @@ class TaskService
 
     public function getTaskById($id): Task|null
     {
-        return Task::where('id', $id)->first();
+        $task = Task::where('id', $id)->first();
+
+        if (!$task) {
+            throw new NotFoundException("Task não encontrada!");
+        }
+        return $task;
     }
 
     public function updateTask(Task $task, $data): Task

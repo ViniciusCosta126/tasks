@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Exceptions\NotFoundException;
 use App\Models\Board;
 
 class BoardService
@@ -19,7 +20,12 @@ class BoardService
 
     public function getBoardById($id): ?Board
     {
-        return Board::where('id', $id)->first();
+        $board = Board::where('id', $id)->first();
+        if (!$board) {
+            throw new NotFoundException("Board com id:$id não encontrado.");
+        }
+
+        return $board;
     }
 
     public function updateBoard(Board $board, $data): Board

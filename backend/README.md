@@ -1,61 +1,64 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# ✅ Checklist de Melhoria da API REST com Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Este projeto segue boas práticas para uma API RESTful utilizando Laravel.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🔧 Estrutura e Boas Práticas
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+-   [x] CRUDs implementados com Form Request para validação
+-   [x] Controllers organizados e separados por recurso
+-   [x] Camada de Service (Service Layer) implementada para regras de negócio
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🚨 Tratamento de Exceções
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+-   [ ] Exceptions customizadas criadas (ex: `BoardNotFoundException`)
+-   [ ] Registro de exceptions no `app/Exceptions/Handler.php`
+-   [ ] Evitar uso desnecessário de try/catch nos controllers
+-   [ ] Exceções retornam respostas JSON amigáveis
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🎨 Padronização de Respostas
 
-## Laravel Sponsors
+-   [ ] API Resources criados com `php artisan make:resource`
+-   [ ] Respostas JSON seguem estrutura consistente
+-   [ ] Coleções usando `BoardResource::collection(...)`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## 🔐 Autenticação
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+-   [ ] Laravel Sanctum instalado e configurado
+-   [ ] Middleware `auth:sanctum` aplicado às rotas protegidas
+-   [ ] Testes de autenticação implementados
+-   [ ] Logout e token management configurados
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 📁 Versionamento da API
 
-## Code of Conduct
+-   [ ] Rotas agrupadas por versão (ex: `/api/v1`)
+-   [ ] Estrutura de pastas opcional: `App\Http\Controllers\API\V1\`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 📚 Documentação da API
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+-   [ ] Laravel Scribe ou Swagger instalado
+-   [ ] Anotações de rota/documentação aplicadas nos controllers
+-   [ ] Documentação gerada com `php artisan scribe:generate`
+-   [ ] Documentação disponível em `/docs`
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 💡 Próximos passos sugeridos
+
+-   [ ] Testes automatizados com PHPUnit ou Pest
+-   [ ] Rate limiting e segurança de requisições
+-   [ ] Cache de dados com `Cache::remember`
+-   [ ] Monitoramento com Sentry, Bugsnag ou similar
+
+---

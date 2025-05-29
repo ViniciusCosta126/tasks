@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Exceptions\NotFoundException;
 use App\Models\Comentario;
 
 class ComentariosService
@@ -19,7 +20,13 @@ class ComentariosService
 
     public function getCommentById($id): Comentario|null
     {
-        return Comentario::where('id', $id)->first();
+        $comment = Comentario::where('id', $id)->first();
+
+        if (!$comment) {
+            throw new NotFoundException("Comentario com id:$id não encontrado.");
+        }
+
+        return $comment;
     }
 
     public function updateComment(Comentario $comment, $data): Comentario

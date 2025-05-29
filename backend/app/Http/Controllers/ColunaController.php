@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreColunaRequest;
 use App\Http\Requests\UpdateColunaRequest;
 use App\Http\Services\ColunaService;
+use App\Traits\TraitHttpResponses;
 use Illuminate\Http\JsonResponse;
 
 class ColunaController extends Controller
 {
+
     public ColunaService $colunaService;
+    use TraitHttpResponses;
     public function __construct(ColunaService $colunaService)
     {
         $this->colunaService = $colunaService;
@@ -20,7 +23,7 @@ class ColunaController extends Controller
     public function index(): JsonResponse
     {
         $colunas = $this->colunaService->getAllColumns();
-        return response()->json(['colunas' => $colunas], 200);
+        return $this->success($colunas, "Colunas trazidas com suceso!");
     }
 
     /**
@@ -30,7 +33,8 @@ class ColunaController extends Controller
     {
         $validated = $request->validated();
         $coluna = $this->colunaService->createColumn($validated);
-        return response()->json(["message" => "Coluna criada com sucesso!", "coluna" => $coluna], 201);
+
+        return $this->success($coluna, "Coluna criada com sucesso!", 201);
     }
 
     /**
@@ -39,12 +43,7 @@ class ColunaController extends Controller
     public function show($id): JsonResponse
     {
         $coluna = $this->colunaService->getColumnById($id);
-
-        if (empty($coluna)) {
-            return response()->json(['message' => "Coluna não encontrada!"], 404);
-        }
-
-        return response()->json(['coluna' => $coluna], 200);
+        return $this->success($coluna, "Coluna trazida com sucesso!");
     }
 
     /**
@@ -53,15 +52,9 @@ class ColunaController extends Controller
     public function update(UpdateColunaRequest $request, $id): JsonResponse
     {
         $coluna = $this->colunaService->getColumnById($id);
-
-        if (empty($coluna)) {
-            return response()->json(['message' => "Coluna não encontrada!"], 404);
-        }
-
         $validated = $request->validated();
         $coluna = $this->colunaService->columnUpdate($coluna, $validated);
-
-        return response()->json(['message' => "Coluna atualizada com sucesso!", 'coluna' => $coluna], 200);
+        return $this->success($coluna, "Coluna atualizada com sucesso!");
     }
 
     /**
@@ -70,13 +63,7 @@ class ColunaController extends Controller
     public function destroy($id): JsonResponse
     {
         $coluna = $this->colunaService->getColumnById($id);
-
-        if (empty($coluna)) {
-            return response()->json(['message' => "Coluna não encontrada!"], 404);
-        }
-
         $this->colunaService->columnDelete($coluna);
-
-        return response()->json(['message' => "Coluna excluida com sucesso!"], 204);
+        return $this->success("", "", 204);
     }
 }

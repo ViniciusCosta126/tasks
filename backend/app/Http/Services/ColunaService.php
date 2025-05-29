@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Exceptions\NotFoundException;
 use App\Models\Coluna;
 class ColunaService
 {
@@ -18,7 +19,12 @@ class ColunaService
 
     public function getColumnById($id): Coluna|null
     {
-        return Coluna::where('id', $id)->first();
+        $column = Coluna::where('id', $id)->first();
+
+        if (!$column) {
+            throw new NotFoundException("Coluna não encontrada!");
+        }
+        return $column;
     }
 
     public function columnUpdate(Coluna $column, $data): Coluna

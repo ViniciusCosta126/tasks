@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreComentarioRequest;
 use App\Http\Requests\UpdateComentarioRequest;
 use App\Http\Services\ComentariosService;
-use Exception;
+use App\Traits\TraitHttpResponses;
 use Illuminate\Http\JsonResponse;
 
 class ComentarioController extends Controller
 {
 
     public ComentariosService $comentariosService;
+    use TraitHttpResponses;
 
     public function __construct(ComentariosService $comentariosService)
     {
@@ -23,7 +24,7 @@ class ComentarioController extends Controller
     public function index(): JsonResponse
     {
         $comentarios = $this->comentariosService->getAllComment();
-        return response()->json(['comentarios' => $comentarios], 200);
+        return $this->success($comentarios, "Comentarios listados com sucesso!");
     }
 
     /**
@@ -31,13 +32,9 @@ class ComentarioController extends Controller
      */
     public function store(StoreComentarioRequest $request): JsonResponse
     {
-        try {
-            $validated = $request->validated();
-            $comentario = $this->comentariosService->createComment($validated);
-            return response()->json(["message" => "comentario criado com sucesso", "comentario" => $comentario], 201);
-        } catch (Exception $e) {
-            return response()->json(["message" => "Erro ao criar comentario.", "error" => $e->getMessage()], 500);
-        }
+        $validated = $request->validated();
+        $comentario = $this->comentariosService->createComment($validated);
+        return $this->success($comentario, "Comentario criado com sucesso!", 201);
     }
 
     /**
@@ -45,17 +42,8 @@ class ComentarioController extends Controller
      */
     public function show($id): JsonResponse
     {
-        try {
-            $comentario = $this->comentariosService->getCommentById($id);
-
-            if (empty($comentario)) {
-                return response()->json(['message' => "Comentario não econtrado"], 404);
-            }
-
-            return response()->json(["comentario", $comentario], 200);
-        } catch (Exception $e) {
-            return response()->json(["message" => "Erro ao buscar comentario", "error" => $e->getMessage()], 500);
-        }
+        $comentario = $this->comentariosService->getCommentById($id);
+        return $this->success($comentario, "Comentario listado com sucesso!");
     }
 
     /**
@@ -63,19 +51,10 @@ class ComentarioController extends Controller
      */
     public function update(UpdateComentarioRequest $request, $id)
     {
-        try {
-            $comentario = $this->comentariosService->getCommentById($id);
-
-            if (empty($comentario)) {
-                return response()->json(['message' => "Comentario não econtrado"], 404);
-            }
-
-            $validated = $request->validated();
-            $comentario = $this->comentariosService->updateComment($comentario, $validated);
-            return response()->json(["message" => "Comentario atualizado com sucesso!", "comentario" => $comentario], 200);
-        } catch (Exception $e) {
-            return response()->json(["message" => "Erro ao editar comentario"], 500);
-        }
+        $comentario = $this->comentariosService->getCommentById($id);
+        $validated = $request->validated();
+        $comentario = $this->comentariosService->updateComment($comentario, $validated);
+        return $this->success($comentario, "Comentario atualizado com sucesso!");
     }
 
     /**
@@ -83,16 +62,8 @@ class ComentarioController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        try {
-            $comentario = $this->comentariosService->getCommentById($id);
-
-            if (empty($comentario)) {
-                return response()->json(["message" => "Erro ao encontrar comentario"], 404);
-            }
-            $this->comentariosService->deleteComment($comentario);
-            return response()->json([], 204);
-        } catch (Exception $e) {
-            return response()->json(['message' => "Erro ao apagar comentario"], 500);
-        }
+        $comentario = $this->comentariosService->getCommentById($id);
+        $this->comentariosService->deleteComment($comentario);
+        return $this->success('', '', 204);
     }
 }
