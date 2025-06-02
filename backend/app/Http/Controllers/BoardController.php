@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BoardRequest;
 use App\Http\Requests\UpdateBoardRequest;
+use App\Http\Resources\BoardResource;
 use App\Http\Services\BoardService;
 use App\Traits\TraitHttpResponses;
 use Illuminate\Http\JsonResponse;
@@ -11,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 class BoardController extends Controller
 {
     public BoardService $boardService;
+
     use TraitHttpResponses;
     public function __construct(BoardService $boardService)
     {
@@ -41,7 +43,7 @@ class BoardController extends Controller
     public function show($id)
     {
         $board = $this->boardService->getBoardById($id);
-        return $this->success($board, "Board encontrada como sucesso!");
+        return $this->success(new BoardResource($board), "Board encontrada como sucesso!");
     }
 
     /**
@@ -53,6 +55,7 @@ class BoardController extends Controller
         $validated = $request->validated();
         $board = $this->boardService->updateBoard($board, $validated);
 
+        $board = new BoardResource($board);
         return $this->success($board, "Board atualizada com sucesso!");
     }
 

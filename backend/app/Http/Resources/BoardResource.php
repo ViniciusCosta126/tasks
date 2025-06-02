@@ -19,9 +19,9 @@ class BoardResource extends JsonResource
         return [
             'id' => $this->id,
             'titulo' => $this->titulo,
-            'user' => $this->user_id,
+            'user_id' => $this->user_id,
             'criado_por' => UserHelper::getNameByUserId($this->user_id),
-            'ativo' => (bool) $this->ativo,
+            'ativo' => $this->ativo,
             'criado_em' => StringHelper::convertDateDayMonthYear($this->created_at),
             'colunas' => ColunaResource::collection($this->whenLoaded('colunas'))
         ];

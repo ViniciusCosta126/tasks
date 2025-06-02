@@ -10,7 +10,7 @@ class BoardService
 {
     public function getAllBoardsActive()
     {
-        $boards = Board::with(['colunas'])->where('ativo', 1)->get();
+        $boards = Board::with(['colunas'])->where('ativo', 1)->orderBy('id')->get();
         return BoardResource::collection($boards);
     }
 
@@ -20,14 +20,14 @@ class BoardService
         return new BoardResource($board);
     }
 
-    public function getBoardById($id): ?BoardResource
+    public function getBoardById($id): ?Board
     {
         $board = Board::with(['colunas'])->where('id', $id)->first();
         if (!$board) {
             throw new NotFoundException("Board com id:$id não encontrado.");
         }
 
-        return new BoardResource($board);
+        return $board;
     }
 
     public function updateBoard(Board $board, $data): BoardResource
