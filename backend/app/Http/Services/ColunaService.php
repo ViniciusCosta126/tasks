@@ -19,20 +19,20 @@ class ColunaService
         return new ColunaResource($coluna);
     }
 
-    public function getColumnById($id): ColunaResource|null
+    public function getColumnById($id): Coluna|null
     {
         $column = Coluna::with(['board', 'tasks'])->where('id', $id)->first();
 
         if (!$column) {
             throw new NotFoundException("Coluna não encontrada!");
         }
-        return new ColunaResource($column);
+        return $column;
     }
 
-    public function columnUpdate(Coluna $column, $data): ColunaResource
+    public function columnUpdate(Coluna $column, $data): Coluna
     {
         $column->update($data);
-        return new ColunaResource($column);
+        return $column;
     }
 
     public function columnDelete(Coluna $column)

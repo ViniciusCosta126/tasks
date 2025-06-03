@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreColunaRequest;
 use App\Http\Requests\UpdateColunaRequest;
+use App\Http\Resources\ColunaResource;
 use App\Http\Services\ColunaService;
 use App\Traits\TraitHttpResponses;
 use Illuminate\Http\JsonResponse;
@@ -43,6 +44,7 @@ class ColunaController extends Controller
     public function show($id): JsonResponse
     {
         $coluna = $this->colunaService->getColumnById($id);
+        $coluna = new ColunaResource($coluna);
         return $this->success($coluna, "Coluna trazida com sucesso!");
     }
 
@@ -54,6 +56,7 @@ class ColunaController extends Controller
         $coluna = $this->colunaService->getColumnById($id);
         $validated = $request->validated();
         $coluna = $this->colunaService->columnUpdate($coluna, $validated);
+        $coluna = new ColunaResource($coluna);
         return $this->success($coluna, "Coluna atualizada com sucesso!");
     }
 
